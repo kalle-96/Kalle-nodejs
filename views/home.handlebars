@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Car Inventory</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+
+<h1>Car Inventory</h1>
+
+<div class="container">
+    {{#each cars}}
+        <div class="card">
+            <h2>{{this.brand}} {{this.model}}</h2>
+            <p>Year: {{this.year}}</p>
+            <p>Electric: {{this.electric}}</p>
+            <p>Features: {{this.features}}</p>
+        </div>
+    {{/each}}
+</div>
+
+</body>
+</html>
