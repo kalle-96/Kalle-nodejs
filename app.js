@@ -1,5 +1,5 @@
 const express = require("express");
-const exphbs = require("express-handlebars");
+const { engine } = require("express-handlebars");
 
 const app = express();
 const PORT = 3000;
@@ -10,7 +10,10 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
 // handlebars
-app.engine("handlebars", exphbs.engine());
+app.engine("handlebars", engine({
+    defaultLayout: "main",
+    extname: ".handlebars"
+}));
 app.set("view engine", "handlebars");
 
 // car dataset
@@ -33,44 +36,40 @@ let cars = [
     }
 ];
 
-// 🔹 GET all cars
+// GET all cars
 app.get("/api/cars", (req, res) => {
     res.json(cars);
 });
 
-// 🔹 GET one car
+// GET one car
 app.get("/api/cars/:id", (req, res) => {
     const car = cars.find(c => c.id == req.params.id);
     if (!car) return res.status(404).send("Car not found");
     res.json(car);
 });
 
-// 🔹 CREATE car
+// CREATE car
 app.post("/api/cars", (req, res) => {
-    const newCar = {
-        id: cars.length + 1,
-        ...req.body
-    };
+    const newCar = { id: cars.length + 1, ...req.body };
     cars.push(newCar);
     res.json(newCar);
 });
 
-// 🔹 UPDATE car
+// UPDATE car
 app.put("/api/cars/:id", (req, res) => {
     const car = cars.find(c => c.id == req.params.id);
     if (!car) return res.status(404).send("Car not found");
-
     Object.assign(car, req.body);
     res.json(car);
 });
 
-// 🔹 DELETE car
+// DELETE car
 app.delete("/api/cars/:id", (req, res) => {
     cars = cars.filter(c => c.id != req.params.id);
     res.send("Car deleted");
 });
 
-// 🔹 webpage
+// webpage
 app.get("/", (req, res) => {
     res.render("home", { cars });
 });
